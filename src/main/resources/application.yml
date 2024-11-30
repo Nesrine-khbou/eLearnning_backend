@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/eLearning
-    username: #your username
-    password: #your password
+    username: postgres
+    password: nesrine
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
