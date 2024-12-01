@@ -3,9 +3,7 @@ package com.backend.application.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "courses")
 public class Course {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,13 +12,26 @@ public class Course {
     private String image;
     private String detailsLink;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_details_id", referencedColumnName = "id")
-    private CourseDetails courseDetails;
-
     @ManyToOne
     @JoinColumn(name = "instructor_id", nullable = false)
     private Instructor instructor;
+
+    @OneToOne
+    @JoinColumn(name = "course_details_id", nullable = false)
+    private CourseDetails courseDetails;
+
+    // Default Constructor
+    public Course() {
+    }
+
+    // Parameterized Constructor
+    public Course(String title, String image, String detailsLink, Instructor instructor, CourseDetails courseDetails) {
+        this.title = title;
+        this.image = image;
+        this.detailsLink = detailsLink;
+        this.instructor = instructor;
+        this.courseDetails = courseDetails;
+    }
 
     // Getters and Setters
     public Long getId() {
@@ -55,19 +66,19 @@ public class Course {
         this.detailsLink = detailsLink;
     }
 
-    public CourseDetails getCourseDetails() {
-        return courseDetails;
-    }
-
-    public void setCourseDetails(CourseDetails courseDetails) {
-        this.courseDetails = courseDetails;
-    }
-
     public Instructor getInstructor() {
         return instructor;
     }
 
     public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
+    }
+
+    public CourseDetails getCourseDetails() {
+        return courseDetails;
+    }
+
+    public void setCourseDetails(CourseDetails courseDetails) {
+        this.courseDetails = courseDetails;
     }
 }
