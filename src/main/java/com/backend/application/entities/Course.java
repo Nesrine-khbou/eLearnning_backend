@@ -1,37 +1,45 @@
 package com.backend.application.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import java.util.List;
 
 @Entity
+@Table(name = "courses")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Course {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
-    private String image;
-    private String detailsLink;
+
+    @Column(nullable = false)
+    private String description;
+
+    private String duration;
+    private int enrolledStudents;
+    private String imageUrl;
+    private String whatWillLearn;
 
     @ManyToOne
-    @JoinColumn(name = "instructor_id", nullable = false)
+    @JoinColumn(name = "instructor_id")
+    @JsonIgnore
     private Instructor instructor;
 
-    @OneToOne
-    @JoinColumn(name = "course_details_id", nullable = false)
-    private CourseDetails courseDetails;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Content> contents;
 
-    // Default Constructor
-    public Course() {
-    }
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Enrollment> enrollments;
 
-    // Parameterized Constructor
-    public Course(String title, String image, String detailsLink, Instructor instructor, CourseDetails courseDetails) {
-        this.title = title;
-        this.image = image;
-        this.detailsLink = detailsLink;
-        this.instructor = instructor;
-        this.courseDetails = courseDetails;
-    }
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Review> reviews;
 
     // Getters and Setters
     public Long getId() {
@@ -50,20 +58,44 @@ public class Course {
         this.title = title;
     }
 
-    public String getImage() {
-        return image;
+    public String getDescription() {
+        return description;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getDetailsLink() {
-        return detailsLink;
+    public String getDuration() {
+        return duration;
     }
 
-    public void setDetailsLink(String detailsLink) {
-        this.detailsLink = detailsLink;
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public int getEnrolledStudents() {
+        return enrolledStudents;
+    }
+
+    public void setEnrolledStudents(int enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getWhatWillLearn() {
+        return whatWillLearn;
+    }
+
+    public void setWhatWillLearn(String whatWillLearn) {
+        this.whatWillLearn = whatWillLearn;
     }
 
     public Instructor getInstructor() {
@@ -74,11 +106,27 @@ public class Course {
         this.instructor = instructor;
     }
 
-    public CourseDetails getCourseDetails() {
-        return courseDetails;
+    public List<Content> getContents() {
+        return contents;
     }
 
-    public void setCourseDetails(CourseDetails courseDetails) {
-        this.courseDetails = courseDetails;
+    public void setContents(List<Content> contents) {
+        this.contents = contents;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }

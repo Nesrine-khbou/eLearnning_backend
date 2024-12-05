@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/instructors")
@@ -20,13 +21,18 @@ public class InstructorController {
     }
 
     @GetMapping("/{id}")
-    public Instructor getInstructorById(@PathVariable Long id) {
+    public Optional<Instructor> getInstructorById(@PathVariable Long id) {
         return instructorService.getInstructorById(id);
     }
 
     @PostMapping
-    public Instructor saveInstructor(@RequestBody Instructor instructor) {
-        return instructorService.saveInstructor(instructor);
+    public Instructor createInstructor(@RequestBody Instructor instructor) {
+        return instructorService.createInstructor(instructor);
+    }
+
+    @PutMapping("/{id}")
+    public Instructor updateInstructor(@PathVariable Long id, @RequestBody Instructor instructor) {
+        return instructorService.updateInstructor(id, instructor);
     }
 
     @DeleteMapping("/{id}")

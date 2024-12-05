@@ -2,57 +2,34 @@ package com.backend.application.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "reviews")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Review {
+public class Enrollment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String reviewText;
-
-    @Column(nullable = false)
-    private int rating;
-
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    @JsonIgnore
+    @JsonIgnore  // Ignore during serialization to break recursion
     private Student student;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
-    @JsonIgnore
+    @JsonIgnore  // Ignore during serialization to break recursion
     private Course course;
 
-    // Getters and Setters
+    private LocalDate enrollmentDate;
+
+    // Getters and setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getReviewText() {
-        return reviewText;
-    }
-
-    public void setReviewText(String reviewText) {
-        this.reviewText = reviewText;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     public Student getStudent() {
@@ -69,5 +46,13 @@ public class Review {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public LocalDate getEnrollmentDate() {
+        return enrollmentDate;
+    }
+
+    public void setEnrollmentDate(LocalDate enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
     }
 }

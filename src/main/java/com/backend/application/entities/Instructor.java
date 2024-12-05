@@ -1,61 +1,28 @@
 package com.backend.application.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "instructors")
-public class Instructor extends Person {
+public class Instructor extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private double instructorRating; // Average rating for instructors
+    private int totalStudents; // Total students enrolled in all instructor's courses
+    private int totalReviews; // Total reviews for the instructor
 
-    private int nbReviews;
-    private int nbStudents;
-    private int nbCourses;
-
-    @OneToMany(mappedBy = "instructor")
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference // Prevents infinite recursion during serialization
     private List<Course> courses;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getNbReviews() {
-        return nbReviews;
-    }
-
-    public void setNbReviews(int nbReviews) {
-        this.nbReviews = nbReviews;
-    }
-
-    public int getNbStudents() {
-        return nbStudents;
-    }
-
-    public void setNbStudents(int nbStudents) {
-        this.nbStudents = nbStudents;
-    }
-
-    public int getNbCourses() {
-        return nbCourses;
-    }
-
-    public void setNbCourses(int nbCourses) {
-        this.nbCourses = nbCourses;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
+    public double getInstructorRating() { return instructorRating; }
+    public void setInstructorRating(double instructorRating) { this.instructorRating = instructorRating; }
+    public int getTotalStudents() { return totalStudents; }
+    public void setTotalStudents(int totalStudents) { this.totalStudents = totalStudents; }
+    public int getTotalReviews() { return totalReviews; }
+    public void setTotalReviews(int totalReviews) { this.totalReviews = totalReviews; }
+    public List<Course> getCourses() { return courses; }
+    public void setCourses(List<Course> courses) { this.courses = courses; }
 }

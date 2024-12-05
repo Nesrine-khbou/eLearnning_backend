@@ -1,33 +1,48 @@
 package com.backend.application.entities;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.List;
 
 @Entity
 @Table(name = "students")
-public class Student extends Person {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Student extends User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    @ElementCollection
-    private List<Long> enrolledCourses; // List of course IDs the student has enrolled in
+        @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        private List<Enrollment> enrollments;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+        @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+        private List<Review> reviews;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+        // Getters and Setters
+        public Long getId() {
+                return id;
+        }
 
-    public List<Long> getEnrolledCourses() {
-        return enrolledCourses;
-    }
+        public void setId(Long id) {
+                this.id = id;
+        }
 
-    public void setEnrolledCourses(List<Long> enrolledCourses) {
-        this.enrolledCourses = enrolledCourses;
-    }
+        public List<Enrollment> getEnrollments() {
+                return enrollments;
+        }
+
+        public void setEnrollments(List<Enrollment> enrollments) {
+                this.enrollments = enrollments;
+        }
+
+        public List<Review> getReviews() {
+                return reviews;
+        }
+
+        public void setReviews(List<Review> reviews) {
+                this.reviews = reviews;
+        }
 }
