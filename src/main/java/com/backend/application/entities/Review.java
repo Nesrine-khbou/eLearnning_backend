@@ -22,12 +22,10 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    @JsonIgnore
     private Student student;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
-    @JsonIgnore
     private Course course;
 
     // Getters and Setters
@@ -64,10 +62,25 @@ public class Review {
     }
 
     public Course getCourse() {
+       System.out.println("aaaaa");
         return course;
     }
 
     public void setCourse(Course course) {
         this.course = course;
     }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", reviewText='" + reviewText + '\'' +
+                ", rating=" + rating +
+                ", studentId=" + (student != null ? student.getId() : null) +
+                ", courseId=" + (course != null ? course.getId() : null) +
+                '}';
+    }
+
+
+
 }

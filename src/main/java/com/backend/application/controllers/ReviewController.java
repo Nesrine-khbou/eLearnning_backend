@@ -27,7 +27,7 @@ public class ReviewController {
 
     @PostMapping
     public Review createReview(@RequestBody Review reviewRequest) {
-        System.out.println("Review received: " + reviewRequest);
+        System.out.println("Review received: " + reviewRequest.toString());
         // Retrieve Course and Student entities using the ids provided in the request body
         Course course = courseService.getCourseById(reviewRequest.getCourse().getId())
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + reviewRequest.getCourse().getId()));

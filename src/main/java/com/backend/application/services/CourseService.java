@@ -43,9 +43,10 @@ public class CourseService {
         existingCourse.setDescription(courseDetails.getDescription());
         existingCourse.setDuration(courseDetails.getDuration());
         existingCourse.setImageUrl(courseDetails.getImageUrl());
-        existingCourse.setWhatWillLearn(courseDetails.getWhatWillLearn());
+        existingCourse.setWhatWillLearn(courseDetails.getWhatWillLearn()); // No change needed
 
         // Save and return the updated course
         return courseRepository.save(existingCourse);
     }
+
 }

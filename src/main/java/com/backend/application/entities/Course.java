@@ -25,7 +25,10 @@ public class Course {
     private String duration;
     private int enrolledStudents;
     private String imageUrl;
-    private String whatWillLearn;
+
+    @Convert(converter = StringListConverter.class)
+    @Column(columnDefinition = "TEXT") // Store the JSON as a long string
+    private List<String> whatWillLearn;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
@@ -90,11 +93,11 @@ public class Course {
         this.imageUrl = imageUrl;
     }
 
-    public String getWhatWillLearn() {
+    public List<String> getWhatWillLearn() {
         return whatWillLearn;
     }
 
-    public void setWhatWillLearn(String whatWillLearn) {
+    public void setWhatWillLearn(List<String> whatWillLearn) {
         this.whatWillLearn = whatWillLearn;
     }
 
