@@ -39,4 +39,16 @@ public class InstructorController {
     public void deleteInstructor(@PathVariable Long id) {
         instructorService.deleteInstructor(id);
     }
+
+    // Endpoint to get the total number of reviews for an instructor
+    @GetMapping("/{id}/reviews")
+    public int getInstructorReviews(@PathVariable Long id) {
+        return instructorService.getInstructorReviews(id);
+    }
+
+    // New endpoint to get the count of courses for an instructor
+    @GetMapping("/{id}/courses/count")
+    public int getInstructorCoursesCount(@PathVariable Long id) {
+        return instructorService.getInstructorCoursesCount(id);
+    }
 }

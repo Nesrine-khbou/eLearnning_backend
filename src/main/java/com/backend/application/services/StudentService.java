@@ -30,9 +30,14 @@ public class StudentService {
         Optional<Student> existingStudent = studentRepository.findById(id);
         if (existingStudent.isPresent()) {
             Student student = existingStudent.get();
+            // Update existing fields
             student.setUsername(updatedStudent.getUsername());
             student.setEmail(updatedStudent.getEmail());
             student.setPassword(updatedStudent.getPassword());
+
+            // Update new image field
+            student.setImage(updatedStudent.getImage());
+
             return studentRepository.save(student);
         }
         throw new RuntimeException("Student not found with id: " + id);
