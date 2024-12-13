@@ -1,12 +1,15 @@
 package com.backend.application.services;
 
 import com.backend.application.entities.*;
+import com.backend.application.repositories.TokenRepository;
 import com.backend.application.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,12 +18,18 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final TokenRepository tokenRepository;
 
-    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthenticationService(UserRepository repository,
+                                 PasswordEncoder passwordEncoder,
+                                 JwtService jwtService,
+                                 AuthenticationManager authenticationManager,
+                                 TokenRepository tokenRepository) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.tokenRepository = tokenRepository;
     }
 
     public AuthenticationResponse register(User request) {
@@ -40,9 +49,12 @@ public class AuthenticationService {
 
         user = repository.save(user);
 
-        String token = jwtService.generateToken(user);
+        String jwt = jwtService.generateToken(user);
 
-        return new  AuthenticationResponse(token);
+        //save the generated token
+        saveUserToken(jwt, user);
+
+        return new  AuthenticationResponse(jwt);
     }
 
     public AuthenticationResponse authenticate(User request) {
@@ -53,6 +65,31 @@ public class AuthenticationService {
         User user  = repository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.generateToken(user);
 
+        revokeAllTokenByUser(user);
+
+        saveUserToken(token, user);
+
         return new  AuthenticationResponse(token);
     }
+
+    private void revokeAllTokenByUser(User user) {
+        List<Token> validTokenListByUser = tokenRepository.findAllTokensByUser(user.getId());
+
+        if(!validTokenListByUser.isEmpty()){
+            validTokenListByUser.forEach(t -> {
+                t.setLoggedOut(true);
+            });
+        }
+
+        tokenRepository.saveAll(validTokenListByUser);
+    }
+
+    private void saveUserToken(String jwt, User user) {
+        Token token = new Token();
+        token.setToken(jwt);
+        token.setLoggedOut(false);
+        token.setUser(user);
+        tokenRepository.save(token);
+    }
+
 }

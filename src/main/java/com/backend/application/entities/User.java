@@ -27,6 +27,9 @@ public class User implements UserDetails {
     // New image attribute
     private String image; // Name of the image
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -66,6 +69,14 @@ public class User implements UserDetails {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(List<Token> tokens) {
+        this.tokens = tokens;
     }
 
     @Override
