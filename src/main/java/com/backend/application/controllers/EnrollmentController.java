@@ -45,6 +45,7 @@ public class EnrollmentController {
 
         return enrollmentService.enrollStudentInCourse(student, course);
     }
+
     @DeleteMapping("/{id}")
     public void unenrollStudent(@PathVariable Long id) {
         enrollmentService.unenrollStudent(id);

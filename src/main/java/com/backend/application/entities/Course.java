@@ -27,12 +27,11 @@ public class Course {
     private String imageUrl;
 
     @Convert(converter = StringListConverter.class)
-    @Column(columnDefinition = "TEXT") // Store the JSON as a long string
+    @Column(columnDefinition = "TEXT")
     private List<String> whatWillLearn;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
-
     private Instructor instructor;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -45,6 +44,7 @@ public class Course {
     private List<Review> reviews;
 
     // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -83,6 +83,10 @@ public class Course {
 
     public void setEnrolledStudents(int enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
+    }
+
+    public void incrementEnrolledStudents() {
+        this.enrolledStudents++;
     }
 
     public String getImageUrl() {

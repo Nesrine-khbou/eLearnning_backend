@@ -30,6 +30,10 @@ public class EnrollmentService {
         enrollment.setStudent(student);
         enrollment.setCourse(course);
         enrollment.setEnrollmentDate(LocalDate.now());
+
+        // Increment the enrolled students count
+        course.incrementEnrolledStudents();
+
         return enrollmentRepository.save(enrollment);
     }
 
