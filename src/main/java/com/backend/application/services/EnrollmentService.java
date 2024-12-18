@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EnrollmentService {
@@ -48,4 +49,12 @@ public class EnrollmentService {
     public List<Enrollment> getEnrollmentsByCourse(Long courseId) {
         return enrollmentRepository.findByCourseId(courseId);
     }
+
+    public List<Course> getEnrolledCoursesByStudent(Student student) {
+        return enrollmentRepository.findByStudent(student)
+                .stream()
+                .map(Enrollment::getCourse) // Extract the courses from enrollments
+                .collect(Collectors.toList());
+    }
+
 }

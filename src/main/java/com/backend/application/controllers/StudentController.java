@@ -1,5 +1,6 @@
 package com.backend.application.controllers;
 
+import com.backend.application.DTO.StudentResponse;
 import com.backend.application.entities.Student;
 import com.backend.application.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student) {
+    public StudentResponse updateStudent(@PathVariable Long id, @RequestBody Student student) {
         return studentService.updateStudent(id, student);
     }
 

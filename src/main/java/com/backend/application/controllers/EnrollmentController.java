@@ -60,4 +60,13 @@ public class EnrollmentController {
     public List<Enrollment> getEnrollmentsByCourse(@PathVariable Long courseId) {
         return enrollmentService.getEnrollmentsByCourse(courseId);
     }
+
+    @GetMapping("/student/{studentId}/courses")
+    public List<Course> getEnrolledCoursesByStudent(@PathVariable Long studentId) {
+        Student student = studentService.getStudentById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+
+        return enrollmentService.getEnrolledCoursesByStudent(student);
+    }
+
 }

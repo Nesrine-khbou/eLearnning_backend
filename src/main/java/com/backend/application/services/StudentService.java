@@ -1,5 +1,6 @@
 package com.backend.application.services;
 
+import com.backend.application.DTO.StudentResponse;
 import com.backend.application.entities.Student;
 import com.backend.application.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +27,18 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Student updateStudent(Long id, Student updatedStudent) {
+    public StudentResponse updateStudent(Long id, Student updatedStudent) {
         Optional<Student> existingStudent = studentRepository.findById(id);
         if (existingStudent.isPresent()) {
             Student student = existingStudent.get();
             // Update existing fields
             student.setUsername(updatedStudent.getUsername());
             student.setEmail(updatedStudent.getEmail());
-            student.setPassword(updatedStudent.getPassword());
-
             // Update new image field
             student.setImage(updatedStudent.getImage());
 
-            return studentRepository.save(student);
+            studentRepository.save(student);
+            return new StudentResponse(updatedStudent.getId(),updatedStudent.getUsername(), updatedStudent.getEmail(), updatedStudent.getImage());
         }
         throw new RuntimeException("Student not found with id: " + id);
     }

@@ -62,7 +62,6 @@ public class Review {
     }
 
     public Course getCourse() {
-       System.out.println("aaaaa");
         return course;
     }
 

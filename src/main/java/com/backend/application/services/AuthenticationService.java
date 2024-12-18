@@ -34,43 +34,44 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(User request) {
         User user;
-        if (request.getRole().equals(Role.INSTRUCTOR)){
+        if (request.getRole().equals(Role.INSTRUCTOR)) {
             user = new Instructor();
-        }
-        else {
+        } else {
             user = new Student();
         }
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setImage(request.getImage());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
         user.setRole(request.getRole());
 
         user = repository.save(user);
 
         String jwt = jwtService.generateToken(user);
 
-        //save the generated token
+        // Save the generated token
         saveUserToken(jwt, user);
 
-        return new  AuthenticationResponse(jwt);
+        return new AuthenticationResponse(jwt, user.getRole().name(), user.getId()); // Include userId
     }
+
+
 
     public AuthenticationResponse authenticate(User request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        User user  = repository.findByUsername(request.getUsername()).orElseThrow();
+        User user = repository.findByUsername(request.getUsername()).orElseThrow();
+
         String token = jwtService.generateToken(user);
 
         revokeAllTokenByUser(user);
-
         saveUserToken(token, user);
 
-        return new  AuthenticationResponse(token);
+        return new AuthenticationResponse(token, user.getRole().name(), user.getId()); // Include userId
     }
+
 
     private void revokeAllTokenByUser(User user) {
         List<Token> validTokenListByUser = tokenRepository.findAllTokensByUser(user.getId());
