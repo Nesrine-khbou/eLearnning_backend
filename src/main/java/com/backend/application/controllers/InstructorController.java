@@ -1,5 +1,7 @@
 package com.backend.application.controllers;
 
+import com.backend.application.DTO.InstructorResponse;
+import com.backend.application.entities.Course;
 import com.backend.application.entities.Instructor;
 import com.backend.application.services.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class InstructorController {
     }
 
     @PutMapping("/{id}")
-    public Instructor updateInstructor(@PathVariable Long id, @RequestBody Instructor instructor) {
+    public InstructorResponse updateInstructor(@PathVariable Long id, @RequestBody Instructor instructor) {
         return instructorService.updateInstructor(id, instructor);
     }
 
@@ -51,4 +53,10 @@ public class InstructorController {
     public int getInstructorCoursesCount(@PathVariable Long id) {
         return instructorService.getInstructorCoursesCount(id);
     }
+
+    @GetMapping("/{id}/courses")
+    public List<Course> getInstructorCourses(@PathVariable Long id) {
+        return instructorService.getInstructorCourses(id);
+    }
+
 }

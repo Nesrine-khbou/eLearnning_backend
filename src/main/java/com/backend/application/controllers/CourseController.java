@@ -1,7 +1,9 @@
 package com.backend.application.controllers;
 
 import com.backend.application.entities.Course;
+import com.backend.application.entities.Instructor;
 import com.backend.application.services.CourseService;
+import com.backend.application.services.InstructorService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,15 +13,26 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
+    private final InstructorService instructorService;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, InstructorService instructorService) {
         this.courseService = courseService;
+        this.instructorService = instructorService;
     }
 
     @PostMapping
     public Course createCourse(@RequestBody Course course) {
+        if (course.getInstructorId() != null) {
+            // Fetch the instructor using the instructorId
+            Instructor instructor = instructorService.getInstructorById(course.getInstructorId())
+                    .orElseThrow(() -> new RuntimeException("Instructor not found with id: " + course.getInstructorId()));
+            // Set the instructor to the course
+            course.setInstructor(instructor);
+        }
+        // Save and return the course
         return courseService.saveCourse(course);
     }
+
 
     @GetMapping
     public List<Course> getAllCourses() {

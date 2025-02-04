@@ -39,7 +39,6 @@ public class ContentService {
         existingContent.setTitle(contentRequest.getTitle());
         existingContent.setVideoUrl(contentRequest.getVideoUrl());
         existingContent.setCategory(contentRequest.getCategory());
-        existingContent.setCourse(contentRequest.getCourse());
         existingContent.setVideoDuration(contentRequest.getVideoDuration()); // Update the video duration
 
         return contentRepository.save(existingContent);

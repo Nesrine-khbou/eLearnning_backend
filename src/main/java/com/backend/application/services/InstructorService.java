@@ -1,5 +1,7 @@
 package com.backend.application.services;
 
+import com.backend.application.DTO.InstructorResponse;
+import com.backend.application.entities.Course;
 import com.backend.application.entities.Instructor;
 import com.backend.application.repositories.InstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +28,25 @@ public class InstructorService {
         return instructorRepository.save(instructor);
     }
 
-    public Instructor updateInstructor(Long id, Instructor updatedInstructor) {
+    public InstructorResponse updateInstructor(Long id, Instructor updatedInstructor) {
         Optional<Instructor> existingInstructor = instructorRepository.findById(id);
         if (existingInstructor.isPresent()) {
             Instructor instructor = existingInstructor.get();
             instructor.setUsername(updatedInstructor.getUsername());
             instructor.setEmail(updatedInstructor.getEmail());
-            instructor.setPassword(updatedInstructor.getPassword());
-            instructor.setTotalStudents(updatedInstructor.getTotalStudents());
-            instructor.setInstructorRating(updatedInstructor.getInstructorRating());
-            instructor.setTotalReviews(updatedInstructor.getTotalReviews());
-            return instructorRepository.save(instructor);
+            instructor.setImage(updatedInstructor.getImage());
+            instructor.setHeadline(updatedInstructor.getHeadline());
+            instructor.setDescription(updatedInstructor.getDescription());
+            instructorRepository.save(instructor);
+
+            return new InstructorResponse(
+                    updatedInstructor.getId(),
+                    updatedInstructor.getUsername(),
+                    updatedInstructor.getEmail(),
+                    updatedInstructor.getImage(),
+                    updatedInstructor.getHeadline(),
+                    updatedInstructor.getDescription()
+            );
         }
         throw new RuntimeException("Instructor not found with id: " + id);
     }
@@ -67,4 +77,11 @@ public class InstructorService {
         }
         throw new RuntimeException("Instructor not found with id: " + instructorId);
     }
-}
+
+        public List<Course> getInstructorCourses(Long instructorId) {
+            return instructorRepository.findById(instructorId)
+                    .map(Instructor::getCourses)
+                    .orElseThrow(() -> new RuntimeException("Instructor not found with id: " + instructorId));
+        }
+    }
+
